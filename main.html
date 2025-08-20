@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Um Pedido Especial</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      background: #fff0f5;
+      color: #d81b60;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-size: cover;
+      animation: fundo-animacao 10s linear infinite;
+    }
+
+    @keyframes fundo-animacao {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
+    }
+
+    h1 {
+      color: #d81b60;
+      margin-top: 80px;
+      font-size: 36px;
+    }
+
+    .mensagem {
+      font-size: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      color: #ad1457;
+    }
+
+    .imagem-amor {
+      margin: 20px auto;
+      max-width: 300px;
+    }
+
+    .imagem-amor img {
+      max-width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(255, 105, 180, 0.3);
+    }
+
+    .botoes {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .botao {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 20px;
+      background-color: #f06292;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: transform 0.3s;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .botao:hover {
+      transform: scale(1.1);
+    }
+
+    .animacao {
+      display: none;
+      margin-top: 40px;
+      font-size: 26px;
+      color: #d81b60;
+      animation: pulsar 2s infinite;
+    }
+
+    @keyframes pulsar {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .coracao {
+      position: absolute;
+      font-size: 30px;
+      color: #f06292;
+      animation: explodir 0.5s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes explodir {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(1.5); }
+    }
+
+    #nao {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    #nao:hover {
+      transform: scale(1.2);
+      background-color: #c2185b;
+    }
+  </style>
+</head>
+<body>
+  <div class="pedido">
+    <h1>Débora, tenho algo pra te dizer... 💖</h1>
+    <div class="mensagem">
+      Obrigado por esses momentos incríveis que já tivemos juntos.<br>
+      Quero muito viver ainda mais histórias ao seu lado, rir, viajar, sonhar...<br><br>
+      Aceita minha companhia daqui para todo o sempre? 💕
+    </div>
+  </div>
+
+  <div class="imagem-amor">
+    <img src="https://i.pinimg.com/originals/97/45/fb/9745fbec317065af2f56e7324e9c3e23.gif" alt="Imagem romântica">
+  </div>
+
+  <div class="botoes">
+    <button id="sim" class="botao">Sim! Claro 💕</button>
+    <button id="nao" class="botao">Não 😢</button>
+  </div>
+
+  <div id="animacao" class="animacao">
+    Mal posso esperar por todos os momentos lindos que ainda vamos viver juntos! 💖✨
+  </div>
+
+  <script>
+    const simButton = document.getElementById('sim');
+    const naoButton = document.getElementById('nao');
+    const animacaoDiv = document.getElementById('animacao');
+
+    function moverBotaoNao() {
+      const maxX = window.innerWidth - naoButton.offsetWidth;
+      const maxY = window.innerHeight - naoButton.offsetHeight;
+      const newX = Math.floor(Math.random() * maxX);
+      const newY = Math.floor(Math.random() * maxY);
+
+      naoButton.style.left = `${newX}px`;
+      naoButton.style.top = `${newY}px`;
+    }
+
+    function criarCoracao(x, y) {
+      const coracao = document.createElement('div');
+      coracao.classList.add('coracao');
+
+      const emojis = ['💖', '💗', '💕', '💓', '💘', '💝'];
+      const emojiAleatorio = emojis[Math.floor(Math.random() * emojis.length)];
+      coracao.textContent = emojiAleatorio;
+
+      coracao.style.left = `${x}px`;
+      coracao.style.top = `${y}px`;
+
+      document.body.appendChild(coracao);
+
+      setTimeout(() => {
+        coracao.remove();
+      }, 1500);
+    }
+
+    simButton.addEventListener('click', () => {
+      simButton.style.display = 'none';
+      naoButton.style.display = 'none';
+      animacaoDiv.style.display = 'block';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      const rect = naoButton.getBoundingClientRect();
+      const distance = Math.sqrt(
+        Math.pow(e.clientX - (rect.left + rect.width / 2), 2) +
+        Math.pow(e.clientY - (rect.top + rect.height / 2), 2)
+      );
+      if (distance < 100) {
+        moverBotaoNao();
+      }
+    });
+
+    naoButton.style.left = `${simButton.offsetLeft + simButton.offsetWidth + 10}px`;
+    naoButton.style.top = `${simButton.offsetTop}px`;
+
+    document.addEventListener('click', (e) => {
+      criarCoracao(e.clientX, e.clientY);
+    });
+
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      criarCoracao(touch.clientX, touch.clientY);
+    });
+  </script>
+</body>
+</html>
